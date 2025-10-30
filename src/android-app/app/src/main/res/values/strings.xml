@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Manzil - Quran App</string>
+    <string name="app_name_short">Manzil</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_surahs">Surahs</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_prayer_times">Prayer Times</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_qibla">Qibla</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_message">Assalamu Alaikum</string>
+    <string name="verse_of_the_day">Verse of the Day</string>
+    <string name="continue_reading">Continue Reading</string>
+    <string name="recent_surahs">Recent Surahs</string>
+    <string name="statistics">Statistics</string>
+    
+    <!-- Surah List -->
+    <string name="all_surahs">All Surahs</string>
+    <string name="search_surahs">Search Surahs…</string>
+    <string name="verses_count">%d Verses</string>
+    <string name="meccan">Meccan</string>
+    <string name="medinan">Medinan</string>
+    <string name="read_surah">Read</string>
+    <string name="play_surah">Play</string>
+    <string name="surah_number">Surah %d</string>
+    
+    <!-- Surah Reader -->
+    <string name="verse_number">Verse %d</string>
+    <string name="translation">Translation</string>
+    <string name="transliteration">Transliteration</string>
+    <string name="tafsir">Tafsir</string>
+    <string name="bookmark_added">Verse bookmarked</string>
+    <string name="bookmark_removed">Bookmark removed</string>
+    <string name="share_verse">Share Verse</string>
+    <string name="copy_verse">Copy Verse</string>
+    <string name="verse_copied">Verse copied to clipboard</string>
+    <string name="play_verse">Play Verse</string>
+    
+    <!-- Bookmarks -->
+    <string name="no_bookmarks">No Bookmarks Yet</string>
+    <string name="no_bookmarks_desc">Start bookmarking verses to save them here</string>
+    <string name="bookmarks_count">%d Bookmarks</string>
+    <string name="delete_bookmark">Delete Bookmark</string>
+    <string name="delete_all_bookmarks">Delete All</string>
+    <string name="confirm_delete_all">Are you sure you want to delete all bookmarks?</string>
+    
+    <!-- Audio Player -->
+    <string name="now_playing">Now Playing</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="repeat">Repeat</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="select_reciter">Select Reciter</string>
+    <string name="playing_surah">Playing %s</string>
+    <string name="loading_audio">Loading audio…</string>
+    
+    <!-- Reciters -->
+    <string name="mishary">Mishary Rashid Alafasy</string>
+    <string name="abdulbasit">Abdul Basit Abdul Samad</string>
+    <string name="sudais">Abdur-Rahman As-Sudais</string>
+    <string name="husary">Mahmoud Khalil Al-Husary</string>
+    <string name="ghamadi">Saad Al-Ghamdi</string>
+    <string name="minshawi">Mohamed Siddiq Al-Minshawi</string>
+    <string name="shuraim">Sa\'ud Ash-Shuraim</string>
+    <string name="ajmy">Ahmed ibn Ali al-Ajamy</string>
+    
+    <!-- Prayer Times -->
+    <string name="fajr">Fajr</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="next_prayer">Next Prayer</string>
+    <string name="time_remaining">%s remaining</string>
+    <string name="location_permission_required">Location permission required for prayer times</string>
+    <string name="enable_location">Enable Location</string>
+    
+    <!-- Settings -->
+    <string name="appearance">Appearance</string>
+    <string name="reading_preferences">Reading Preferences</string>
+    <string name="audio_preferences">Audio Preferences</string>
+    <string name="notifications">Notifications</string>
+    <string name="about">About</string>
+    
+    <string name="theme">Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_theme">System Default</string>
+    
+    <string name="font_size">Font Size</string>
+    <string name="font_size_small">Small</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_large">Large</string>
+    <string name="font_size_extra_large">Extra Large</string>
+    
+    <string name="show_translation">Show Translation</string>
+    <string name="show_transliteration">Show Transliteration</string>
+    <string name="show_tafsir">Show Tafsir</string>
+    <string name="translation_language">Translation Language</string>
+    
+    <string name="default_reciter">Default Reciter</string>
+    <string name="audio_quality">Audio Quality</string>
+    <string name="auto_play_next">Auto Play Next</string>
+    <string name="download_for_offline">Download for Offline</string>
+    
+    <string name="prayer_notifications">Prayer Time Notifications</string>
+    <string name="verse_reminders">Daily Verse Reminders</string>
+    <string name="notification_sound">Notification Sound</string>
+    
+    <string name="app_version">App Version</string>
+    <string name="version">Version %s</string>
+    <string name="developer">Developed by Manzil Team</string>
+    <string name="rate_app">Rate this App</string>
+    <string name="share_app">Share this App</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+    
+    <!-- Search -->
+    <string name="search">Search</string>
+    <string name="search_quran">Search Quran</string>
+    <string name="search_hint">Search by surah name, verse, or keyword…</string>
+    <string name="no_results">No results found</string>
+    <string name="no_results_desc">Try searching with different keywords</string>
+    <string name="search_results">Search Results</string>
+    <string name="results_count">%d Results</string>
+    
+    <!-- Statistics -->
+    <string name="reading_progress">Reading Progress</string>
+    <string name="total_verses_read">Total Verses Read</string>
+    <string name="surahs_completed">Surahs Completed</string>
+    <string name="time_spent_reading">Time Spent Reading</string>
+    <string name="current_streak">Current Streak</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+    
+    <!-- Error Messages -->
+    <string name="error_loading_surahs">Error loading surahs</string>
+    <string name="error_loading_verses">Error loading verses</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_try_again">Please try again</string>
+    <string name="error_audio_playback">Error playing audio</string>
+    <string name="error_location">Unable to get location</string>
+    <string name="error_generic">Something went wrong</string>
+    
+    <!-- Actions -->
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+    <string name="done">Done</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    
+    <!-- Loading -->
+    <string name="loading">Loading…</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="fetching_data">Fetching data…</string>
+    
+    <!-- Share Messages -->
+    <string name="share_verse_text">%1$s\n\n— %2$s (%3$d:%4$d)\n\nShared from Manzil Quran App</string>
+    <string name="share_app_text">Read and listen to the Holy Quran with Manzil App\nDownload now: https://play.google.com/store/apps/details?id=com.manzil.quranapp</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_name">Quran Notifications</string>
+    <string name="notification_channel_desc">Notifications for prayer times and verse reminders</string>
+    <string name="prayer_notification_title">Time for %s</string>
+    <string name="prayer_notification_message">It\'s time for %s prayer</string>
+    
+    <!-- Qibla -->
+    <string name="qibla_direction">Qibla Direction</string>
+    <string name="calibrate_compass">Calibrate your compass</string>
+    <string name="distance_to_kaaba">Distance to Ka\'aba: %s km</string>
+    <string name="direction_accuracy">Accuracy: %s</string>
+    
+    <!-- Data -->
+    <string name="data_usage">Data Usage</string>
+    <string name="cache_size">Cache Size</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="cache_cleared">Cache cleared successfully</string>
+    <string name="download_manager">Download Manager</string>
+    
+    <!-- Accessibility -->
+    <string name="content_description_menu">Menu</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_bookmark">Bookmark</string>
+    <string name="content_description_play">Play</string>
+    <string name="content_description_pause">Pause</string>
+    <string name="content_description_close">Close</string>
+</resources>

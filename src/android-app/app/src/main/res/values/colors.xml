@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors - Emerald & Teal Gradient Theme -->
+    <color name="primary">#10B981</color>
+    <color name="primary_dark">#059669</color>
+    <color name="primary_light">#34D399</color>
+    <color name="secondary">#14B8A6</color>
+    <color name="secondary_dark">#0D9488</color>
+    <color name="secondary_light">#2DD4BF</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent">#F59E0B</color>
+    <color name="accent_light">#FCD34D</color>
+    
+    <!-- Background Colors -->
+    <color name="background">#F9FAFB</color>
+    <color name="background_dark">#111827</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_dark">#1F2937</color>
+    
+    <!-- Card Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_background_dark">#374151</color>
+    <color name="card_elevated">#F3F4F6</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#111827</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_tertiary">#9CA3AF</color>
+    <color name="text_hint">#D1D5DB</color>
+    
+    <!-- Text Colors Dark Mode -->
+    <color name="text_primary_dark">#F9FAFB</color>
+    <color name="text_secondary_dark">#D1D5DB</color>
+    <color name="text_tertiary_dark">#9CA3AF</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#10B981</color>
+    <color name="gradient_end">#14B8A6</color>
+    <color name="gradient_purple_start">#A855F7</color>
+    <color name="gradient_pink">#EC4899</color>
+    <color name="gradient_rose">#F43F5E</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#10B981</color>
+    <color name="error">#EF4444</color>
+    <color name="warning">#F59E0B</color>
+    <color name="info">#3B82F6</color>
+    
+    <!-- Divider & Border -->
+    <color name="divider">#E5E7EB</color>
+    <color name="divider_dark">#4B5563</color>
+    <color name="border">#D1D5DB</color>
+    
+    <!-- Overlay -->
+    <color name="overlay">#80000000</color>
+    <color name="overlay_light">#40000000</color>
+    
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+    
+    <!-- White & Black -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    
+    <!-- Revelation Type Colors -->
+    <color name="meccan_bg">#FEF3C7</color>
+    <color name="meccan_text">#92400E</color>
+    <color name="medinan_bg">#DBEAFE</color>
+    <color name="medinan_text">#1E40AF</color>
+    
+    <!-- Shimmer Colors -->
+    <color name="shimmer_base">#E0E0E0</color>
+    <color name="shimmer_highlight">#F5F5F5</color>
+    
+    <!-- Audio Player Colors -->
+    <color name="player_background">#10B981</color>
+    <color name="player_control">#FFFFFF</color>
+    <color name="player_progress">#FFFFFF</color>
+    <color name="player_progress_background">#40FFFFFF</color>
+    
+    <!-- Bookmark Color -->
+    <color name="bookmark_active">#F59E0B</color>
+    <color name="bookmark_inactive">#9CA3AF</color>
+</resources>

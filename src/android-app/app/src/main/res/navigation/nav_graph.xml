@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.manzil.quranapp.ui.home.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_surah_reader"
+            app:destination="@id/surahReaderFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/surahReaderFragment"
+        android:name="com.manzil.quranapp.ui.reader.SurahReaderFragment"
+        android:label="@string/nav_surahs"
+        tools:layout="@layout/fragment_surah_reader">
+        <argument
+            android:name="surahNumber"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookmarksFragment"
+        android:name="com.manzil.quranapp.ui.bookmarks.BookmarksFragment"
+        android:label="@string/nav_bookmarks"
+        tools:layout="@layout/fragment_bookmarks">
+        <action
+            android:id="@+id/action_bookmarks_to_surah_reader"
+            app:destination="@id/surahReaderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/prayerTimesFragment"
+        android:name="com.manzil.quranapp.ui.prayer.PrayerTimesFragment"
+        android:label="@string/nav_prayer_times"
+        tools:layout="@layout/fragment_prayer_times" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.manzil.quranapp.ui.settings.SettingsFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

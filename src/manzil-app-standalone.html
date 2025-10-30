@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manzil - Quran App</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Amiri for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f9fafb;
+            overflow-x: hidden;
+        }
+        
+        .font-arabic {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+        }
+        
+        .dark-mode {
+            background: #1f2937;
+            color: #f9fafb;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .scroll-area {
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+        
+        .scroll-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scroll-area::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
+        
+        .verse-card {
+            border-left: 3px solid #10b981;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .verse-card:hover {
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+            transform: translateX(4px);
+        }
+        
+        .audio-player {
+            position: fixed;
+            bottom: 80px;
+            left: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+            z-index: 999;
+        }
+        
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #10b981;
+            ring: 2px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        @media (min-width: 768px) {
+            .audio-player {
+                bottom: 1rem;
+            }
+            
+            .bottom-nav {
+                display: none;
+            }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, createContext, useContext } = React;
+
+        // ============== QURAN DATA ==============
+        const allSurahs = [
+            { number: 1, name: 'الفاتحة', englishName: 'Al-Fatihah', englishNameTranslation: 'The Opening', numberOfAyahs: 7, revelationType: 'Meccan' },
+            { number: 2, name: 'البقرة', englishName: 'Al-Baqarah', englishNameTranslation: 'The Cow', numberOfAyahs: 286, revelationType: 'Medinan' },
+            { number: 3, name: 'آل عمران', englishName: 'Ali Imran', englishNameTranslation: 'Family of Imran', numberOfAyahs: 200, revelationType: 'Medinan' },
+            { number: 4, name: 'النساء', englishName: 'An-Nisa', englishNameTranslation: 'The Women', numberOfAyahs: 176, revelationType: 'Medinan' },
+            { number: 5, name: 'المائدة', englishName: 'Al-Maidah', englishNameTranslation: 'The Table Spread', numberOfAyahs: 120, revelationType: 'Medinan' },
+            { number: 6, name: 'الأنعام', englishName: 'Al-Anam', englishNameTranslation: 'The Cattle', numberOfAyahs: 165, revelationType: 'Meccan' },
+            { number: 7, name: 'الأعراف', englishName: 'Al-Araf', englishNameTranslation: 'The Heights', numberOfAyahs: 206, revelationType: 'Meccan' },
+            { number: 8, name: 'الأنفال', englishName: 'Al-Anfal', englishNameTranslation: 'The Spoils of War', numberOfAyahs: 75, revelationType: 'Medinan' },
+            { number: 9, name: 'التوبة', englishName: 'At-Tawbah', englishNameTranslation: 'The Repentance', numberOfAyahs: 129, revelationType: 'Medinan' },
+            { number: 10, name: 'يونس', englishName: 'Yunus', englishNameTranslation: 'Jonah', numberOfAyahs: 109, revelationType: 'Meccan' },
+            { number: 11, name: 'هود', englishName: 'Hud', englishNameTranslation: 'Hud', numberOfAyahs: 123, revelationType: 'Meccan' },
+            { number: 12, name: 'يوسف', englishName: 'Yusuf', englishNameTranslation: 'Joseph', numberOfAyahs: 111, revelationType: 'Meccan' },
+            { number: 13, name: 'الرعد', englishName: 'Ar-Rad', englishNameTranslation: 'The Thunder', numberOfAyahs: 43, revelationType: 'Medinan' },
+            { number: 14, name: 'ابراهيم', englishName: 'Ibrahim', englishNameTranslation: 'Abraham', numberOfAyahs: 52, revelationType: 'Meccan' },
+            { number: 15, name: 'الحجر', englishName: 'Al-Hijr', englishNameTranslation: 'The Rocky Tract', numberOfAyahs: 99, revelationType: 'Meccan' },
+            { number: 16, name: 'النحل', englishName: 'An-Nahl', englishNameTranslation: 'The Bee', numberOfAyahs: 128, revelationType: 'Meccan' },
+            { number: 17, name: 'الإسراء', englishName: 'Al-Isra', englishNameTranslation: 'The Night Journey', numberOfAyahs: 111, revelationType: 'Meccan' },
+            { number: 18, name: 'الكهف', englishName: 'Al-Kahf', englishNameTranslation: 'The Cave', numberOfAyahs: 110, revelationType: 'Meccan' },
+            { number: 19, name: 'مريم', englishName: 'Maryam', englishNameTranslation: 'Mary', numberOfAyahs: 98, revelationType: 'Meccan' },
+            { number: 20, name: 'طه', englishName: 'Taha', englishNameTranslation: 'Ta-Ha', numberOfAyahs: 135, revelationType: 'Meccan' },
+            { number: 21, name: 'الأنبياء', englishName: 'Al-Anbiya', englishNameTranslation: 'The Prophets', numberOfAyahs: 112, revelationType: 'Meccan' },
+            { number: 22, name: 'الحج', englishName: 'Al-Hajj', englishNameTranslation: 'The Pilgrimage', numberOfAyahs: 78, revelationType: 'Medinan' },
+            { number: 23, name: 'المؤمنون', englishName: 'Al-Muminun', englishNameTranslation: 'The Believers', numberOfAyahs: 118, revelationType: 'Meccan' },
+            { number: 24, name: 'النور', englishName: 'An-Nur', englishNameTranslation: 'The Light', numberOfAyahs: 64, revelationType: 'Medinan' },
+            { number: 25, name: 'الفرقان', englishName: 'Al-Furqan', englishNameTranslation: 'The Criterion', numberOfAyahs: 77, revelationType: 'Meccan' },
+            { number: 26, name: 'الشعراء', englishName: 'Ash-Shuara', englishNameTranslation: 'The Poets', numberOfAyahs: 227, revelationType: 'Meccan' },
+            { number: 27, name: 'النمل', englishName: 'An-Naml', englishNameTranslation: 'The Ant', numberOfAyahs: 93, revelationType: 'Meccan' },
+            { number: 28, name: 'القصص', englishName: 'Al-Qasas', englishNameTranslation: 'The Stories', numberOfAyahs: 88, revelationType: 'Meccan' },
+            { number: 29, name: 'العنكبوت', englishName: 'Al-Ankabut', englishNameTranslation: 'The Spider', numberOfAyahs: 69, revelationType: 'Meccan' },
+            { number: 30, name: 'الروم', englishName: 'Ar-Rum', englishNameTranslation: 'The Romans', numberOfAyahs: 60, revelationType: 'Meccan' },
+            { number: 31, name: 'لقمان', englishName: 'Luqman', englishNameTranslation: 'Luqman', numberOfAyahs: 34, revelationType: 'Meccan' },
+            { number: 32, name: 'السجدة', englishName: 'As-Sajdah', englishNameTranslation: 'The Prostration', numberOfAyahs: 30, revelationType: 'Meccan' },
+            { number: 33, name: 'الأحزاب', englishName: 'Al-Ahzab', englishNameTranslation: 'The Combined Forces', numberOfAyahs: 73, revelationType: 'Medinan' },
+            { number: 34, name: 'سبإ', englishName: 'Saba', englishNameTranslation: 'Sheba', numberOfAyahs: 54, revelationType: 'Meccan' },
+            { number: 35, name: 'فاطر', englishName: 'Fatir', englishNameTranslation: 'Originator', numberOfAyahs: 45, revelationType: 'Meccan' },
+            { number: 36, name: 'يس', englishName: 'Ya-Sin', englishNameTranslation: 'Ya Sin', numberOfAyahs: 83, revelationType: 'Meccan' },
+            { number: 37, name: 'الصافات', englishName: 'As-Saffat', englishNameTranslation: 'Those who set the Ranks', numberOfAyahs: 182, revelationType: 'Meccan' },
+            { number: 38, name: 'ص', englishName: 'Sad', englishNameTranslation: 'The Letter Saad', numberOfAyahs: 88, revelationType: 'Meccan' },
+            { number: 39, name: 'الزمر', englishName: 'Az-Zumar', englishNameTranslation: 'The Troops', numberOfAyahs: 75, revelationType: 'Meccan' },
+            { number: 40, name: 'غافر', englishName: 'Ghafir', englishNameTranslation: 'The Forgiver', numberOfAyahs: 85, revelationType: 'Meccan' },
+            { number: 41, name: 'فصلت', englishName: 'Fussilat', englishNameTranslation: 'Explained in Detail', numberOfAyahs: 54, revelationType: 'Meccan' },
+            { number: 42, name: 'الشورى', englishName: 'Ash-Shuraa', englishNameTranslation: 'The Consultation', numberOfAyahs: 53, revelationType: 'Meccan' },
+            { number: 43, name: 'الزخرف', englishName: 'Az-Zukhruf', englishNameTranslation: 'The Ornaments of Gold', numberOfAyahs: 89, revelationType: 'Meccan' },
+            { number: 44, name: 'الدخان', englishName: 'Ad-Dukhan', englishNameTranslation: 'The Smoke', numberOfAyahs: 59, revelationType: 'Meccan' },
+            { number: 45, name: 'الجاثية', englishName: 'Al-Jathiyah', englishNameTranslation: 'The Crouching', numberOfAyahs: 37, revelationType: 'Meccan' },
+            { number: 46, name: 'الأحقاف', englishName: 'Al-Ahqaf', englishNameTranslation: 'The Wind-Curved Sandhills', numberOfAyahs: 35, revelationType: 'Meccan' },
+            { number: 47, name: 'محمد', englishName: 'Muhammad', englishNameTranslation: 'Muhammad', numberOfAyahs: 38, revelationType: 'Medinan' },
+            { number: 48, name: 'الفتح', englishName: 'Al-Fath', englishNameTranslation: 'The Victory', numberOfAyahs: 29, revelationType: 'Medinan' },
+            { number: 49, name: 'الحجرات', englishName: 'Al-Hujurat', englishNameTranslation: 'The Rooms', numberOfAyahs: 18, revelationType: 'Medinan' },
+            { number: 50, name: 'ق', englishName: 'Qaf', englishNameTranslation: 'The Letter Qaf', numberOfAyahs: 45, revelationType: 'Meccan' },
+            { number: 51, name: 'الذاريات', englishName: 'Adh-Dhariyat', englishNameTranslation: 'The Winnowing Winds', numberOfAyahs: 60, revelationType: 'Meccan' },
+            { number: 52, name: 'الطور', englishName: 'At-Tur', englishNameTranslation: 'The Mount', numberOfAyahs: 49, revelationType: 'Meccan' },
+            { number: 53, name: 'النجم', englishName: 'An-Najm', englishNameTranslation: 'The Star', numberOfAyahs: 62, revelationType: 'Meccan' },
+            { number: 54, name: 'القمر', englishName: 'Al-Qamar', englishNameTranslation: 'The Moon', numberOfAyahs: 55, revelationType: 'Meccan' },
+            { number: 55, name: 'الرحمن', englishName: 'Ar-Rahman', englishNameTranslation: 'The Beneficent', numberOfAyahs: 78, revelationType: 'Medinan' },
+            { number: 56, name: 'الواقعة', englishName: 'Al-Waqiah', englishNameTranslation: 'The Inevitable', numberOfAyahs: 96, revelationType: 'Meccan' },
+            { number: 57, name: 'الحديد', englishName: 'Al-Hadid', englishNameTranslation: 'The Iron', numberOfAyahs: 29, revelationType: 'Medinan' },
+            { number: 58, name: 'المجادلة', englishName: 'Al-Mujadila', englishNameTranslation: 'The Pleading Woman', numberOfAyahs: 22, revelationType: 'Medinan' },
+            { number: 59, name: 'الحشر', englishName: 'Al-Hashr', englishNameTranslation: 'The Exile', numberOfAyahs: 24, revelationType: 'Medinan' },
+            { number: 60, name: 'الممتحنة', englishName: 'Al-Mumtahanah', englishNameTranslation: 'She that is to be examined', numberOfAyahs: 13, revelationType: 'Medinan' },
+            { number: 61, name: 'الصف', englishName: 'As-Saf', englishNameTranslation: 'The Ranks', numberOfAyahs: 14, revelationType: 'Medinan' },
+            { number: 62, name: 'الجمعة', englishName: 'Al-Jumuah', englishNameTranslation: 'Friday', numberOfAyahs: 11, revelationType: 'Medinan' },
+            { number: 63, name: 'المنافقون', englishName: 'Al-Munafiqun', englishNameTranslation: 'The Hypocrites', numberOfAyahs: 11, revelationType: 'Medinan' },
+            { number: 64, name: 'التغابن', englishName: 'At-Taghabun', englishNameTranslation: 'The Mutual Disillusion', numberOfAyahs: 18, revelationType: 'Medinan' },
+            { number: 65, name: 'الطلاق', englishName: 'At-Talaq', englishNameTranslation: 'The Divorce', numberOfAyahs: 12, revelationType: 'Medinan' },
+            { number: 66, name: 'التحريم', englishName: 'At-Tahrim', englishNameTranslation: 'The Prohibition', numberOfAyahs: 12, revelationType: 'Medinan' },
+            { number: 67, name: 'الملك', englishName: 'Al-Mulk', englishNameTranslation: 'The Sovereignty', numberOfAyahs: 30, revelationType: 'Meccan' },
+            { number: 68, name: 'القلم', englishName: 'Al-Qalam', englishNameTranslation: 'The Pen', numberOfAyahs: 52, revelationType: 'Meccan' },
+            { number: 69, name: 'الحاقة', englishName: 'Al-Haqqah', englishNameTranslation: 'The Reality', numberOfAyahs: 52, revelationType: 'Meccan' },
+            { number: 70, name: 'المعارج', englishName: 'Al-Maarij', englishNameTranslation: 'The Ascending Stairways', numberOfAyahs: 44, revelationType: 'Meccan' },
+            { number: 71, name: 'نوح', englishName: 'Nuh', englishNameTranslation: 'Noah', numberOfAyahs: 28, revelationType: 'Meccan' },
+            { number: 72, name: 'الجن', englishName: 'Al-Jinn', englishNameTranslation: 'The Jinn', numberOfAyahs: 28, revelationType: 'Meccan' },
+            { number: 73, name: 'المزمل', englishName: 'Al-Muzzammil', englishNameTranslation: 'The Enshrouded One', numberOfAyahs: 20, revelationType: 'Meccan' },
+            { number: 74, name: 'المدثر', englishName: 'Al-Muddaththir', englishNameTranslation: 'The Cloaked One', numberOfAyahs: 56, revelationType: 'Meccan' },
+            { number: 75, name: 'القيامة', englishName: 'Al-Qiyamah', englishNameTranslation: 'The Resurrection', numberOfAyahs: 40, revelationType: 'Meccan' },
+            { number: 76, name: 'الانسان', englishName: 'Al-Insan', englishNameTranslation: 'The Man', numberOfAyahs: 31, revelationType: 'Medinan' },
+            { number: 77, name: 'المرسلات', englishName: 'Al-Mursalat', englishNameTranslation: 'The Emissaries', numberOfAyahs: 50, revelationType: 'Meccan' },
+            { number: 78, name: 'النبإ', englishName: 'An-Naba', englishNameTranslation: 'The Tidings', numberOfAyahs: 40, revelationType: 'Meccan' },
+            { number: 79, name: 'النازعات', englishName: 'An-Naziat', englishNameTranslation: 'Those who drag forth', numberOfAyahs: 46, revelationType: 'Meccan' },
+            { number: 80, name: 'عبس', englishName: 'Abasa', englishNameTranslation: 'He Frowned', numberOfAyahs: 42, revelationType: 'Meccan' },
+            { number: 81, name: 'التكوير', englishName: 'At-Takwir', englishNameTranslation: 'The Overthrowing', numberOfAyahs: 29, revelationType: 'Meccan' },
+            { number: 82, name: 'الإنفطار', englishName: 'Al-Infitar', englishNameTranslation: 'The Cleaving', numberOfAyahs: 19, revelationType: 'Meccan' },
+            { number: 83, name: 'المطففين', englishName: 'Al-Mutaffifin', englishNameTranslation: 'The Defrauding', numberOfAyahs: 36, revelationType: 'Meccan' },
+            { number: 84, name: 'الإنشقاق', englishName: 'Al-Inshiqaq', englishNameTranslation: 'The Sundering', numberOfAyahs: 25, revelationType: 'Meccan' },
+            { number: 85, name: 'البروج', englishName: 'Al-Buruj', englishNameTranslation: 'The Mansions of the Stars', numberOfAyahs: 22, revelationType: 'Meccan' },
+            { number: 86, name: 'الطارق', englishName: 'At-Tariq', englishNameTranslation: 'The Nightcomer', numberOfAyahs: 17, revelationType: 'Meccan' },
+            { number: 87, name: 'الأعلى', englishName: 'Al-Ala', englishNameTranslation: 'The Most High', numberOfAyahs: 19, revelationType: 'Meccan' },
+            { number: 88, name: 'الغاشية', englishName: 'Al-Ghashiyah', englishNameTranslation: 'The Overwhelming', numberOfAyahs: 26, revelationType: 'Meccan' },
+            { number: 89, name: 'الفجر', englishName: 'Al-Fajr', englishNameTranslation: 'The Dawn', numberOfAyahs: 30, revelationType: 'Meccan' },
+            { number: 90, name: 'البلد', englishName: 'Al-Balad', englishNameTranslation: 'The City', numberOfAyahs: 20, revelationType: 'Meccan' },
+            { number: 91, name: 'الشمس', englishName: 'Ash-Shams', englishNameTranslation: 'The Sun', numberOfAyahs: 15, revelationType: 'Meccan' },
+            { number: 92, name: 'الليل', englishName: 'Al-Layl', englishNameTranslation: 'The Night', numberOfAyahs: 21, revelationType: 'Meccan' },
+            { number: 93, name: 'الضحى', englishName: 'Ad-Duhaa', englishNameTranslation: 'The Morning Hours', numberOfAyahs: 11, revelationType: 'Meccan' },
+            { number: 94, name: 'الشرح', englishName: 'Ash-Sharh', englishNameTranslation: 'The Relief', numberOfAyahs: 8, revelationType: 'Meccan' },
+            { number: 95, name: 'التين', englishName: 'At-Tin', englishNameTranslation: 'The Fig', numberOfAyahs: 8, revelationType: 'Meccan' },
+            { number: 96, name: 'العلق', englishName: 'Al-Alaq', englishNameTranslation: 'The Clot', numberOfAyahs: 19, revelationType: 'Meccan' },
+            { number: 97, name: 'القدر', englishName: 'Al-Qadr', englishNameTranslation: 'The Power', numberOfAyahs: 5, revelationType: 'Meccan' },
+            { number: 98, name: 'البينة', englishName: 'Al-Bayyinah', englishNameTranslation: 'The Clear Proof', numberOfAyahs: 8, revelationType: 'Medinan' },
+            { number: 99, name: 'الزلزلة', englishName: 'Az-Zalzalah', englishNameTranslation: 'The Earthquake', numberOfAyahs: 8, revelationType: 'Medinan' },
+            { number: 100, name: 'العاديات', englishName: 'Al-Adiyat', englishNameTranslation: 'The Courser', numberOfAyahs: 11, revelationType: 'Meccan' },
+            { number: 101, name: 'القارعة', englishName: 'Al-Qariah', englishNameTranslation: 'The Calamity', numberOfAyahs: 11, revelationType: 'Meccan' },
+            { number: 102, name: 'التكاثر', englishName: 'At-Takathur', englishNameTranslation: 'The Rivalry in world increase', numberOfAyahs: 8, revelationType: 'Meccan' },
+            { number: 103, name: 'العصر', englishName: 'Al-Asr', englishNameTranslation: 'The Declining Day', numberOfAyahs: 3, revelationType: 'Meccan' },
+            { number: 104, name: 'الهمزة', englishName: 'Al-Humazah', englishNameTranslation: 'The Traducer', numberOfAyahs: 9, revelationType: 'Meccan' },
+            { number: 105, name: 'الفيل', englishName: 'Al-Fil', englishNameTranslation: 'The Elephant', numberOfAyahs: 5, revelationType: 'Meccan' },
+            { number: 106, name: 'قريش', englishName: 'Quraysh', englishNameTranslation: 'Quraysh', numberOfAyahs: 4, revelationType: 'Meccan' },
+            { number: 107, name: 'الماعون', englishName: 'Al-Maun', englishNameTranslation: 'The Small kindnesses', numberOfAyahs: 7, revelationType: 'Meccan' },
+            { number: 108, name: 'الكوثر', englishName: 'Al-Kawthar', englishNameTranslation: 'The Abundance', numberOfAyahs: 3, revelationType: 'Meccan' },
+            { number: 109, name: 'الكافرون', englishName: 'Al-Kafirun', englishNameTranslation: 'The Disbelievers', numberOfAyahs: 6, revelationType: 'Meccan' },
+            { number: 110, name: 'النصر', englishName: 'An-Nasr', englishNameTranslation: 'The Divine Support', numberOfAyahs: 3, revelationType: 'Medinan' },
+            { number: 111, name: 'المسد', englishName: 'Al-Masad', englishNameTranslation: 'The Palm Fiber', numberOfAyahs: 5, revelationType: 'Meccan' },
+            { number: 112, name: 'الإخلاص', englishName: 'Al-Ikhlas', englishNameTranslation: 'The Sincerity', numberOfAyahs: 4, revelationType: 'Meccan' },
+            { number: 113, name: 'الفلق', englishName: 'Al-Falaq', englishNameTranslation: 'The Daybreak', numberOfAyahs: 5, revelationType: 'Meccan' },
+            { number: 114, name: 'الناس', englishName: 'An-Nas', englishNameTranslation: 'Mankind', numberOfAyahs: 6, revelationType: 'Meccan' }
+        ];
+
+        const reciters = [
+            { id: 'mishary', name: 'Mishary Rashid Alafasy' },
+            { id: 'abdulbasit', name: 'Abdul Basit Abdul Samad' },
+            { id: 'sudais', name: 'Abdur-Rahman As-Sudais' },
+            { id: 'husary', name: 'Mahmoud Khalil Al-Husary' },
+            { id: 'ghamadi', name: 'Saad Al-Ghamdi' },
+            { id: 'minshawi', name: 'Mohamed Siddiq Al-Minshawi' },
+            { id: 'shuraim', name: 'Saud Ash-Shuraim' },
+            { id: 'ajmy', name: 'Ahmed ibn Ali al-Ajamy' }
+        ];
+
+        // Get full Surah audio URL
+        const getAudioUrl = (surahNumber, reciterId) => {
+            const paddedNumber = surahNumber.toString().padStart(3, '0');
+            const reciterUrls = {
+                'mishary': `https://server8.mp3quran.net/afs/${paddedNumber}.mp3`,
+                'abdulbasit': `https://server7.mp3quran.net/basit/${paddedNumber}.mp3`,
+                'sudais': `https://server11.mp3quran.net/sds/${paddedNumber}.mp3`,
+                'husary': `https://server8.mp3quran.net/hsr/${paddedNumber}.mp3`,
+                'ghamadi': `https://server10.mp3quran.net/s_gmd/${paddedNumber}.mp3`,
+                'minshawi': `https://server10.mp3quran.net/minsh/${paddedNumber}.mp3`,
+                'shuraim': `https://server11.mp3quran.net/shr/${paddedNumber}.mp3`,
+                'ajmy': `https://server10.mp3quran.net/ajm/${paddedNumber}.mp3`
+            };
+            return reciterUrls[reciterId] || reciterUrls['mishary'];
+        };
+
+        // Get verse audio URL
+        const getVerseAudioUrl = (surahNumber, verseNumber, reciterId) => {
+            const paddedSurah = surahNumber.toString().padStart(3, '0');
+            const paddedVerse = verseNumber.toString().padStart(3, '0');
+            const reciterUrls = {
+                'mishary': 'https://everyayah.com/data/Alafasy_128kbps',
+                'abdulbasit': 'https://everyayah.com/data/Abdul_Basit_Murattal_192kbps',
+                'sudais': 'https://everyayah.com/data/Abdurrahmaan_As-Sudais_192kbps',
+                'husary': 'https://everyayah.com/data/Husary_128kbps',
+                'ghamadi': 'https://everyayah.com/data/Ghamadi_40kbps',
+                'minshawi': 'https://everyayah.com/data/Minshawi_Murattal_128kbps',
+                'shuraim': 'https://everyayah.com/data/Shuraym_128kbps',
+                'ajmy': 'https://everyayah.com/data/Ahmed_ibn_Ali_al-Ajamy_128kbps'
+            };
+            const baseUrl = reciterUrls[reciterId] || reciterUrls['mishary'];
+            return `${baseUrl}/${paddedSurah}${paddedVerse}.mp3`;
+        };
+
+        // Fetch Surah verses from API
+        const fetchSurahVerses = async (surahNumber) => {
+            try {
+                const [arabicResponse, translationResponse, transliterationResponse] = await Promise.all([
+                    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`),
+                    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/en.asad`),
+                    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/en.transliteration`)
+                ]);
+
+                const arabicData = await arabicResponse.json();
+                const translationData = await translationResponse.json();
+                const transliterationData = await transliterationResponse.json();
+
+                if (arabicData.code !== 200 || !arabicData.data) {
+                    throw new Error('Failed to fetch');
+                }
+
+                const verses = [];
+                const ayahs = arabicData.data.ayahs;
+
+                for (let i = 0; i < ayahs.length; i++) {
+                    verses.push({
+                        number: ayahs[i].number,
+                        numberInSurah: ayahs[i].numberInSurah,
+                        text: ayahs[i].text,
+                        translation: translationData.data?.ayahs[i]?.text || 'Translation not available',
+                        transliteration: transliterationData.data?.ayahs[i]?.text || 'Transliteration not available'
+                    });
+                }
+
+                return verses;
+            } catch (error) {
+                console.error('Error fetching verses:', error);
+                const surah = allSurahs.find(s => s.number === surahNumber);
+                if (!surah) return [];
+                
+                const verses = [];
+                for (let i = 1; i <= surah.numberOfAyahs; i++) {
+                    verses.push({
+                        number: i,
+                        numberInSurah: i,
+                        text: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                        translation: `Verse ${i} of Surah ${surah.englishName}. Please check your internet connection.`,
+                        transliteration: `Verse ${i}`
+                    });
+                }
+                return verses;
+            }
+        };
+
+        // ============== MAIN APP COMPONENT ==============
+        function ManzilApp() {
+            const [view, setView] = useState('home');
+            const [selectedSurah, setSelectedSurah] = useState(null);
+            const [theme, setTheme] = useState('light');
+            const [searchOpen, setSearchOpen] = useState(false);
+            const [audioPlayerData, setAudioPlayerData] = useState(null);
+            const [bookmarks, setBookmarks] = useState([]);
+            const [settings, setSettings] = useState({
+                fontSize: 24,
+                translationEnabled: true,
+                transliterationEnabled: false,
+                reciter: 'mishary'
+            });
+
+            const handleSelectSurah = (surahNumber) => {
+                setSelectedSurah(surahNumber);
+                setView('reader');
+            };
+
+            const handlePlaySurah = (surahNumber) => {
+                const surah = allSurahs.find(s => s.number === surahNumber);
+                if (surah) {
+                    const audioUrl = getAudioUrl(surahNumber, settings.reciter);
+                    setAudioPlayerData({
+                        title: surah.englishName,
+                        subtitle: `${surah.englishNameTranslation} • ${surah.numberOfAyahs} verses`,
+                        audioUrl,
+                        surahNumber
+                    });
+                }
+            };
+
+            const handleToggleBookmark = (surahNumber, verseNumber) => {
+                const key = `${surahNumber}-${verseNumber}`;
+                const exists = bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber);
+                
+                if (exists) {
+                    setBookmarks(bookmarks.filter(b => !(b.surahNumber === surahNumber && b.verseNumber === verseNumber)));
+                } else {
+                    setBookmarks([...bookmarks, { surahNumber, verseNumber }]);
+                }
+            };
+
+            return (
+                <div className={theme === 'dark' ? 'dark-mode' : ''} style={{ minHeight: '100vh', paddingBottom: '80px' }}>
+                    {/* Header */}
+                    <header className="gradient-bg text-white p-4 sticky top-0 z-50 shadow-lg">
+                        <div className="max-w-7xl mx-auto flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                                <div>
+                                    <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>Manzil</h1>
+                                    <p style={{ fontSize: '0.75rem', opacity: 0.9, margin: 0 }}>Quran App</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => setSearchOpen(true)}
+                                    style={{ padding: '0.5rem' }}
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </button>
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                                    style={{ padding: '0.5rem' }}
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <div className="max-w-7xl mx-auto p-4">
+                        {view === 'home' && (
+                            <SurahList 
+                                onSelectSurah={handleSelectSurah}
+                                onPlaySurah={handlePlaySurah}
+                                bookmarksCount={bookmarks.length}
+                            />
+                        )}
+
+                        {view === 'reader' && selectedSurah && (
+                            <SurahReader
+                                surahNumber={selectedSurah}
+                                onBack={() => { setSelectedSurah(null); setView('home'); }}
+                                settings={settings}
+                                bookmarks={bookmarks}
+                                onToggleBookmark={handleToggleBookmark}
+                            />
+                        )}
+
+                        {view === 'bookmarks' && (
+                            <BookmarksList
+                                bookmarks={bookmarks}
+                                onSelectSurah={handleSelectSurah}
+                            />
+                        )}
+
+                        {view === 'settings' && (
+                            <SettingsPanel
+                                settings={settings}
+                                onUpdateSettings={(newSettings) => setSettings({ ...settings, ...newSettings })}
+                            />
+                        )}
+                    </div>
+
+                    {/* Audio Player */}
+                    {audioPlayerData && (
+                        <AudioPlayer
+                            title={audioPlayerData.title}
+                            subtitle={audioPlayerData.subtitle}
+                            audioUrl={audioPlayerData.audioUrl}
+                            onClose={() => setAudioPlayerData(null)}
+                        />
+                    )}
+
+                    {/* Bottom Navigation */}
+                    <div className="bottom-nav">
+                        <button 
+                            className={`btn ${view === 'home' ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={() => setView('home')}
+                            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Surahs
+                        </button>
+                        <button 
+                            className={`btn ${view === 'bookmarks' ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={() => setView('bookmarks')}
+                            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '0.75rem', position: 'relative' }}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                            </svg>
+                            Bookmarks
+                            {bookmarks.length > 0 && (
+                                <span style={{ position: 'absolute', top: '-4px', right: '8px', background: '#ef4444', color: 'white', borderRadius: '9999px', padding: '2px 6px', fontSize: '0.625rem' }}>
+                                    {bookmarks.length}
+                                </span>
+                            )}
+                        </button>
+                        <button 
+                            className={`btn ${view === 'settings' ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={() => setView('settings')}
+                            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Settings
+                        </button>
+                    </div>
+
+                    {/* Search Modal */}
+                    {searchOpen && (
+                        <SearchDialog
+                            onClose={() => setSearchOpen(false)}
+                            onSelectSurah={(num) => { handleSelectSurah(num); setSearchOpen(false); }}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // ============== SURAH LIST COMPONENT ==============
+        function SurahList({ onSelectSurah, onPlaySurah, bookmarksCount }) {
+            const [searchTerm, setSearchTerm] = useState('');
+
+            const filteredSurahs = allSurahs.filter(surah =>
+                surah.englishName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                surah.name.includes(searchTerm) ||
+                surah.number.toString().includes(searchTerm)
+            );
+
+            return (
+                <div className="fade-in">
+                    <div className="card" style={{ background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f43f5e 100%)', color: 'white', marginBottom: '1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', margin: 0 }}>Verse of the Day</h3>
+                        </div>
+                        <p className="font-arabic" style={{ fontSize: '1.5rem', textAlign: 'right', marginBottom: '0.75rem', lineHeight: '1.8' }}>
+                            وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا
+                        </p>
+                        <p style={{ fontSize: '0.875rem', opacity: 0.95, marginBottom: '0.5rem' }}>
+                            And whoever fears Allah - He will make for him a way out.
+                        </p>
+                        <p style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                            Surah At-Talaq (65:2)
+                        </p>
+                    </div>
+
+                    <div className="card">
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                            All Surahs <span style={{ color: '#10b981' }}>({allSurahs.length})</span>
+                        </h2>
+                        
+                        <input
+                            type="text"
+                            placeholder="Search Surahs..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            style={{ marginBottom: '1rem' }}
+                        />
+
+                        <div className="scroll-area">
+                            {filteredSurahs.map(surah => (
+                                <div key={surah.number} className="verse-card">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{ 
+                                            width: '48px', 
+                                            height: '48px', 
+                                            background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', 
+                                            color: 'white', 
+                                            borderRadius: '8px', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            fontWeight: 'bold',
+                                            fontSize: '1.125rem',
+                                            flexShrink: 0
+                                        }}>
+                                            {surah.number}
+                                        </div>
+                                        
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.25rem' }}>
+                                                <div>
+                                                    <h3 style={{ fontWeight: '600', fontSize: '1.125rem', margin: 0 }}>{surah.englishName}</h3>
+                                                    <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>{surah.englishNameTranslation}</p>
+                                                </div>
+                                                <p className="font-arabic" style={{ fontSize: '1.25rem', color: '#10b981', margin: 0 }}>{surah.name}</p>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                                                <span style={{ 
+                                                    background: '#f3f4f6', 
+                                                    color: '#374151', 
+                                                    padding: '0.25rem 0.75rem', 
+                                                    borderRadius: '9999px', 
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '500'
+                                                }}>
+                                                    {surah.numberOfAyahs} Verses
+                                                </span>
+                                                <span style={{ 
+                                                    background: surah.revelationType === 'Meccan' ? '#fef3c7' : '#dbeafe', 
+                                                    color: surah.revelationType === 'Meccan' ? '#92400e' : '#1e40af', 
+                                                    padding: '0.25rem 0.75rem', 
+                                                    borderRadius: '9999px', 
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '500'
+                                                }}>
+                                                    {surah.revelationType}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                                        <button 
+                                            className="btn btn-primary"
+                                            onClick={() => onSelectSurah(surah.number)}
+                                            style={{ flex: 1 }}
+                                        >
+                                            Read
+                                        </button>
+                                        <button 
+                                            className="btn btn-secondary"
+                                            onClick={() => onPlaySurah(surah.number)}
+                                            style={{ padding: '0.5rem 1rem' }}
+                                        >
+                                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== SURAH READER COMPONENT ==============
+        function SurahReader({ surahNumber, onBack, settings, bookmarks, onToggleBookmark }) {
+            const [verses, setVerses] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [surah, setSurah] = useState(null);
+
+            useEffect(() => {
+                const loadSurah = async () => {
+                    setLoading(true);
+                    const foundSurah = allSurahs.find(s => s.number === surahNumber);
+                    setSurah(foundSurah);
+                    
+                    if (foundSurah) {
+                        const loadedVerses = await fetchSurahVerses(surahNumber);
+                        setVerses(loadedVerses);
+                    }
+                    
+                    setLoading(false);
+                };
+
+                loadSurah();
+            }, [surahNumber]);
+
+            if (loading || !surah) {
+                return (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+                        <div className="loading"></div>
+                    </div>
+                );
+            }
+
+            const isBookmarked = (verseNum) => {
+                return bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNum);
+            };
+
+            return (
+                <div className="fade-in">
+                    <div className="card">
+                        <button className="btn btn-secondary" onClick={onBack} style={{ marginBottom: '1rem' }}>
+                            ← Back to Surahs
+                        </button>
+                        
+                        <div style={{ textAlign: 'center', padding: '2rem 1rem', background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', borderRadius: '12px', color: 'white', marginBottom: '1.5rem' }}>
+                            <h1 className="font-arabic" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{surah.name}</h1>
+                            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{surah.englishName}</h2>
+                            <p style={{ fontSize: '1rem', opacity: 0.9 }}>{surah.englishNameTranslation}</p>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
+                                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem' }}>
+                                    {surah.numberOfAyahs} Verses
+                                </span>
+                                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem' }}>
+                                    {surah.revelationType}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="scroll-area">
+                            {verses.map(verse => (
+                                <div key={verse.numberInSurah} className="verse-card">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
+                                        <div style={{ 
+                                            background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', 
+                                            color: 'white', 
+                                            width: '32px', 
+                                            height: '32px', 
+                                            borderRadius: '50%', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            fontWeight: 'bold',
+                                            fontSize: '0.875rem'
+                                        }}>
+                                            {verse.numberInSurah}
+                                        </div>
+                                        <button
+                                            className="btn btn-secondary"
+                                            onClick={() => onToggleBookmark(surahNumber, verse.numberInSurah)}
+                                            style={{ padding: '0.5rem' }}
+                                        >
+                                            <svg className="w-5 h-5" fill={isBookmarked(verse.numberInSurah) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <p className="font-arabic" style={{ fontSize: `${settings.fontSize}px`, textAlign: 'right', lineHeight: '2', marginBottom: '1rem' }}>
+                                        {verse.text}
+                                    </p>
+
+                                    {settings.transliterationEnabled && (
+                                        <p style={{ fontSize: '0.875rem', fontStyle: 'italic', color: '#6b7280', marginBottom: '0.75rem' }}>
+                                            {verse.transliteration}
+                                        </p>
+                                    )}
+
+                                    {settings.translationEnabled && (
+                                        <p style={{ fontSize: '1rem', color: '#374151', lineHeight: '1.6' }}>
+                                            {verse.translation}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== BOOKMARKS LIST COMPONENT ==============
+        function BookmarksList({ bookmarks, onSelectSurah }) {
+            if (bookmarks.length === 0) {
+                return (
+                    <div className="card" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+                        <svg className="w-16 h-16" style={{ margin: '0 auto 1rem', color: '#d1d5db' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                        </svg>
+                        <h3 style={{ fontSize: '1.25rem', color: '#6b7280', marginBottom: '0.5rem' }}>No Bookmarks Yet</h3>
+                        <p style={{ color: '#9ca3af' }}>Start bookmarking verses to save them here</p>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="card fade-in">
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                        Your Bookmarks <span style={{ color: '#10b981' }}>({bookmarks.length})</span>
+                    </h2>
+
+                    <div className="scroll-area">
+                        {bookmarks.map((bookmark, index) => {
+                            const surah = allSurahs.find(s => s.number === bookmark.surahNumber);
+                            return (
+                                <div key={index} className="verse-card" onClick={() => onSelectSurah(bookmark.surahNumber)} style={{ cursor: 'pointer' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{ 
+                                            width: '48px', 
+                                            height: '48px', 
+                                            background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', 
+                                            color: 'white', 
+                                            borderRadius: '8px', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            fontWeight: 'bold',
+                                            fontSize: '0.875rem',
+                                            flexDirection: 'column',
+                                            lineHeight: '1.2'
+                                        }}>
+                                            <div>{bookmark.surahNumber}:{bookmark.verseNumber}</div>
+                                        </div>
+                                        
+                                        <div style={{ flex: 1 }}>
+                                            <h3 style={{ fontWeight: '600', fontSize: '1.125rem', margin: 0 }}>{surah?.englishName}</h3>
+                                            <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0 }}>Verse {bookmark.verseNumber}</p>
+                                        </div>
+
+                                        <svg className="w-5 h-5" style={{ color: '#10b981' }} fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== SETTINGS PANEL COMPONENT ==============
+        function SettingsPanel({ settings, onUpdateSettings }) {
+            return (
+                <div className="card fade-in">
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Settings</h2>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                            Arabic Font Size: {settings.fontSize}px
+                        </label>
+                        <input
+                            type="range"
+                            min="16"
+                            max="48"
+                            value={settings.fontSize}
+                            onChange={(e) => onUpdateSettings({ fontSize: parseInt(e.target.value) })}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={settings.translationEnabled}
+                                onChange={(e) => onUpdateSettings({ translationEnabled: e.target.checked })}
+                                style={{ width: '20px', height: '20px' }}
+                            />
+                            <span style={{ fontWeight: '500' }}>Show Translation</span>
+                        </label>
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={settings.transliterationEnabled}
+                                onChange={(e) => onUpdateSettings({ transliterationEnabled: e.target.checked })}
+                                style={{ width: '20px', height: '20px' }}
+                            />
+                            <span style={{ fontWeight: '500' }}>Show Transliteration</span>
+                        </label>
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                            Select Reciter
+                        </label>
+                        <select
+                            value={settings.reciter}
+                            onChange={(e) => onUpdateSettings({ reciter: e.target.value })}
+                        >
+                            {reciters.map(reciter => (
+                                <option key={reciter.id} value={reciter.id}>
+                                    {reciter.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== SEARCH DIALOG COMPONENT ==============
+        function SearchDialog({ onClose, onSelectSurah }) {
+            const [searchQuery, setSearchQuery] = useState('');
+
+            const results = allSurahs.filter(surah =>
+                surah.englishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                surah.name.includes(searchQuery) ||
+                surah.number.toString().includes(searchQuery)
+            ).slice(0, 10);
+
+            return (
+                <div className="modal" onClick={onClose}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div style={{ padding: '1.5rem', borderBottom: '1px solid #e5e7eb' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>Search Quran</h3>
+                                <button onClick={onClose} style={{ padding: '0.5rem', background: 'none', border: 'none', cursor: 'pointer' }}>
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Search by surah name or number..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                autoFocus
+                            />
+                        </div>
+
+                        <div style={{ padding: '1rem', overflowY: 'auto', maxHeight: '400px' }}>
+                            {results.length === 0 && searchQuery && (
+                                <div style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af' }}>
+                                    No results found
+                                </div>
+                            )}
+
+                            {results.map(surah => (
+                                <div
+                                    key={surah.number}
+                                    className="verse-card"
+                                    onClick={() => onSelectSurah(surah.number)}
+                                    style={{ cursor: 'pointer', marginBottom: '0.5rem' }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{ 
+                                            width: '40px', 
+                                            height: '40px', 
+                                            background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)', 
+                                            color: 'white', 
+                                            borderRadius: '8px', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {surah.number}
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ fontWeight: '600' }}>{surah.englishName}</div>
+                                            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>{surah.englishNameTranslation}</div>
+                                        </div>
+                                        <div className="font-arabic" style={{ fontSize: '1.25rem', color: '#10b981' }}>
+                                            {surah.name}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== AUDIO PLAYER COMPONENT ==============
+        function AudioPlayer({ title, subtitle, audioUrl, onClose }) {
+            const audioRef = useRef(null);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [currentTime, setCurrentTime] = useState(0);
+            const [duration, setDuration] = useState(0);
+            const [volume, setVolume] = useState(1);
+
+            useEffect(() => {
+                if (audioRef.current) {
+                    audioRef.current.src = audioUrl;
+                    audioRef.current.play();
+                    setIsPlaying(true);
+                }
+            }, [audioUrl]);
+
+            useEffect(() => {
+                const audio = audioRef.current;
+                if (!audio) return;
+
+                const updateTime = () => setCurrentTime(audio.currentTime);
+                const updateDuration = () => setDuration(audio.duration);
+
+                audio.addEventListener('timeupdate', updateTime);
+                audio.addEventListener('loadedmetadata', updateDuration);
+
+                return () => {
+                    audio.removeEventListener('timeupdate', updateTime);
+                    audio.removeEventListener('loadedmetadata', updateDuration);
+                };
+            }, []);
+
+            const togglePlay = () => {
+                if (audioRef.current) {
+                    if (isPlaying) {
+                        audioRef.current.pause();
+                    } else {
+                        audioRef.current.play();
+                    }
+                    setIsPlaying(!isPlaying);
+                }
+            };
+
+            const handleSeek = (e) => {
+                const newTime = parseFloat(e.target.value);
+                if (audioRef.current) {
+                    audioRef.current.currentTime = newTime;
+                    setCurrentTime(newTime);
+                }
+            };
+
+            const handleVolumeChange = (e) => {
+                const newVolume = parseFloat(e.target.value);
+                if (audioRef.current) {
+                    audioRef.current.volume = newVolume;
+                    setVolume(newVolume);
+                }
+            };
+
+            const formatTime = (seconds) => {
+                if (isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+
+            return (
+                <div className="audio-player">
+                    <audio ref={audioRef} />
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <h4 style={{ fontWeight: '600', fontSize: '1.125rem', margin: '0 0 0.25rem 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {title}
+                            </h4>
+                            <p style={{ fontSize: '0.875rem', opacity: 0.9, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {subtitle}
+                            </p>
+                        </div>
+                        <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '0.25rem' }}>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div style={{ marginBottom: '1rem' }}>
+                        <input
+                            type="range"
+                            min="0"
+                            max={duration || 100}
+                            value={currentTime}
+                            onChange={handleSeek}
+                            style={{ width: '100%', cursor: 'pointer' }}
+                        />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', opacity: 0.9, marginTop: '0.25rem' }}>
+                            <span>{formatTime(currentTime)}</span>
+                            <span>{formatTime(duration)}</span>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <button
+                            onClick={togglePlay}
+                            style={{ 
+                                width: '48px', 
+                                height: '48px', 
+                                borderRadius: '50%', 
+                                background: 'white', 
+                                color: '#10b981', 
+                                border: 'none', 
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {isPlaying ? (
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                                </svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            )}
+                        </button>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '150px' }}>
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                            </svg>
+                            <input
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                value={volume}
+                                onChange={handleVolumeChange}
+                                style={{ width: '100%', cursor: 'pointer' }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============== RENDER APP ==============
+        ReactDOM.render(<ManzilApp />, document.getElementById('root'));
+    </script>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
